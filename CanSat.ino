@@ -6,7 +6,10 @@ int trykkpin = A1; //pressure
 int axelxpin = A2; //axelerometer x
 int axelypin = A3; //axelerometer y
 int axelzpin = A4; //axelerometer z
+int buzzpin = 13; //pin for the buzzer
 
+unsigned long buzzdelay = 10000;
+bool buzzstate = LOW;
 int rrate = 200; //delay in ms
 long timecode = 0;
 bool raw = 0;
@@ -40,6 +43,7 @@ char* voltprint(int adcvalue, char* buf)
 void setup() {
   Serial.begin(9600);
   while (millis() < 1000);
+  pinMode(buzzpin, OUTPUT);
 }
 
 void loop() {
@@ -68,6 +72,10 @@ void loop() {
 
 
   Serial.println(sensordata);
+  
+  if (millis() > buzzdelay){
+   digitalWrite(buzzpin, !buzzstate); 
+  }
 
   while (millis() < timecode + rrate);
 }
